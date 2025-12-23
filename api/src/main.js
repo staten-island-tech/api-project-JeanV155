@@ -24,4 +24,24 @@ document.querySelector('#app').innerHTML = `
   </div>
 `
 
-setupCounter(document.querySelector('#counter'))
+setupCounter(document.querySelector('#counter')) 
+
+async function  getAlldata() {
+  try {
+    const response = await fetch ("https://www.fruityvice.com/api/fruit/all")
+    if (response.status != 200) {
+      throw new Error (response)
+    } else {
+      const data = await response.json 
+      data.cards.forEach((cards)
+        
+      });
+    }
+    
+  } catch (error) {
+    
+  }
+
+}
+  
+
