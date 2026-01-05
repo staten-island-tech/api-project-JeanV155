@@ -1,47 +1,67 @@
 import './style.css'
-import javascriptLogo from './javascript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.js'
 
-const api = await fetch ("https://www.fruityvice.com/api/fruit/all")
-const apidata = await api.json()
-console.log(apidata)
-document.querySelector('#app').innerHTML = `
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-      <img src="${javascriptLogo}" class="logo vanilla" alt="JavaScript logo" />
-    </a>
-    <h1>Hello Vite!</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite logo to learn more
-    </p>
+const API_URL = 'https://www.fruityvice.com/api/fruit/all'
+const app = document.querySelector('#app')
+
+app.innerHTML = `
+  <div class="p-6 max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold mb-6 text-center">
+      Fruit API Project
+    </h1>
+
+    <div id="status" class="text-center mb-4"></div>
+
+    <div
+      id="fruit-list"
+      class="grid gap-4 sm:grid-cols-2 md:grid-cols-3"
+    ></div>
   </div>
 `
 
-setupCounter(document.querySelector('#counter')) 
+const fruitList = document.querySelector('#fruit-list')
+const statusMessage = document.querySelector('#status')
 
-async function  getAlldata() {
-  try {
-    const response = await fetch ("https://www.fruityvice.com/api/fruit/all")
-    if (response.status != 200) {
-      throw new Error (response)
-    } else {
-      const data = await response.json 
-      data.cards.forEach((cards)
-        
-      });
-    }
-    
-  } catch (error) {
-    
-  }
-
+// ---------- RENDER ----------
+function renderFruits(fruits) {
+  fruitList.innerHTML = fruits
+    .map(fruit => `
+      <div class="border rounded-lg p-4 shadow-sm">
+        <h2 class="text-xl font-semibold mb-2">${fruit.name}</h2>
+        <ul class="text-sm text-gray-700">
+          <li>Calories: ${fruit.nutritions.calories}</li>
+          <li>Sugar: ${fruit.nutritions.sugar}</li>
+          <li>Carbs: ${fruit.nutritions.carbohydrates}</li>
+        </ul>
+      </div>
+    `)
+    .join('')
 }
+
+// ---------- FETCH ----------
+async function getAllFruits() {
+  try {
+    statusMessage.textContent = 'Loading fruits...'
+
+    const response = await fetch(API_URL)
+
+    if (!response.ok) {
+      throw new Error(`HTTP Error: ${response.status}`)
+    }
+
+    const data = await response.json()
+
+    statusMessage.textContent = ''
+    renderFruits(data)
+
+  } catch (error) {
+    statusMessage.textContent = 'Failed to load fruit data.'
+    statusMessage.className = 'text-red-500 text-center'
+    console.error(error)
+  }
+}
+
+// ---------- INIT ----------
+getAllFruits()
+
   
 
