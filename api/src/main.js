@@ -42,7 +42,8 @@ async function getAllFruits() {
   try {
     statusMessage.textContent = 'Loading fruits...'
 
-    const response = await fetch(API_URL)
+    const response = await fetch(API_URL) 
+    console.log()
 
     if (!response.ok) {
       throw new Error(`HTTP Error: ${response.status}`)
