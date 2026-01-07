@@ -1,74 +1,51 @@
-import './style.css'
+const API_KEY = "123";
+const BASE_URL = `https://www.thesportsdb.com/api/v1/json/${API_KEY}/searchplayers.php?p=`;
 
-const API_URL = 'https://www.fruityvice.com/api/fruit/all'
+document.getElementById("searchBtn").addEventListener("click", searchPlayers);
 
-const app = document.querySelector('#app')
+async function searchPlayers() {
+  const query = document.getElementById("playerInput").value.trim();
+  const resultsDiv = document.getElementById("results");
+  const countP = document.getElementById("count");
 
-app.innerHTML = `
-  <div class="p-6 max-w-5xl mx-auto">
-    <h1 class="text-3xl font-bold mb-6 text-center">
-      Fruityvice API Project 
-    </h1>
+  resultsDiv.innerHTML = "";
+  countP.textContent = "";
 
-    <div id="status" class="text-center mb-4"></div>
+  if (!query) {
+    countP.textContent = "Please enter a player name.";
+    return;
+  }
 
-    <div
-      id="fruit-cards"
-      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
-    ></div>
-  </div>
-`
+  countP.textContent = "Searching...";
 
-const cards = document.querySelector('#fruit-cards')
-const statusMessage = document.querySelector('#status')
-
-function renderFruits(fruits) {
-  cards.innerHTML = fruits
-    .map(
-      (fruit) => `
-        <div class="border rounded-lg p-5 shadow-sm text-center">
-          <h2 class="text-xl font-bold mb-2">
-            ${fruit.name}
-          </h2>
-
-          <ul class="text-sm text-gray-700 space-y-1">
-            <li><strong>Family:</strong> ${fruit.family}</li>
-            <li><strong>Order:</strong> ${fruit.order}</li>
-            <li><strong>Genus:</strong> ${fruit.genus}</li>
-            <li><strong>Calories:</strong> ${fruit.nutritions.calories}</li>
-            <li><strong>Sugar:</strong> ${fruit.nutritions.sugar}g</li>
-          </ul>
-        </div>
-      `
-    )
-    .join('')
-}
-
-async function getFruits() {
   try {
-    statusMessage.textContent = 'Loading fruits...'
-    statusMessage.className = 'text-gray-500 text-center'
+    const res = await fetch(BASE_URL + encodeURIComponent(query));
+    const data = await res.json();
 
-    const response = await fetch(API_URL)
-
-    if (!response.ok) {
-      throw new Error(`HTTP error: ${response.status}`)
+    if (!data.player || data.player.length === 0) {
+      countP.textContent = "No players found.";
+      return;
     }
 
-    const fruits = await response.json()
+    countP.textContent = `Found ${data.player.length} players`;
 
-    statusMessage.textContent = ''
-    renderFruits(fruits)
+    data.player.forEach(player => {
+      const div = document.createElement("div");
+      div.className = "player-card";
+
+      div.innerHTML = `
+        <strong>${player.strPlayer}</strong><br>
+        Team: ${player.strTeam || "N/A"}<br>
+        Sport: ${player.strSport || "N/A"}<br>
+        Nationality: ${player.strNationality || "N/A"}<br>
+        <hr>
+      `;
+
+      resultsDiv.appendChild(div);
+    });
+
   } catch (error) {
-    statusMessage.textContent = 'Failed to load fruit data.'
-    statusMessage.className = 'text-red-500 text-center'
-    console.error(error)
+    countP.textContent = "Error fetching players.";
+    console.error(error);
   }
 }
-
-getFruits()
-
-
-
-
-
