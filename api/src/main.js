@@ -1,5 +1,7 @@
-const API_KEY = "123";
-const BASE_URL = `https://www.thesportsdb.com/api/v1/json/${API_KEY}/searchplayers.php?p=`;
+const API = {
+  key: "123",
+  baseUrl: "https://www.thesportsdb.com/api/v1/json/123/searchplayers.php?p="
+};
 
 document.getElementById("searchBtn").addEventListener("click", searchPlayers);
 
@@ -19,7 +21,7 @@ async function searchPlayers() {
   countP.textContent = "Searching...";
 
   try {
-    const res = await fetch(BASE_URL + encodeURIComponent(query));
+    const res = await fetch(API.baseUrl + encodeURIComponent(query));
     const data = await res.json();
 
     if (!data.player || data.player.length === 0) {
@@ -30,22 +32,32 @@ async function searchPlayers() {
     countP.textContent = `Found ${data.player.length} players`;
 
     data.player.forEach(player => {
-      const div = document.createElement("div");
-      div.className = "player-card";
-
-      div.innerHTML = `
-        <strong>${player.strPlayer}</strong><br>
-        Team: ${player.strTeam || "N/A"}<br>
-        Sport: ${player.strSport || "N/A"}<br>
-        Nationality: ${player.strNationality || "N/A"}<br>
-        <hr>
-      `;
-
-      resultsDiv.appendChild(div);
+      resultsDiv.appendChild(createPlayerCard(player));
     });
 
   } catch (error) {
     countP.textContent = "Error fetching players.";
     console.error(error);
   }
+}
+
+
+function createPlayerCard(player) {
+  const div = document.createElement("div");
+  div.className = "card player-card";
+  div.dataset.id = player.idPlayer;
+
+  div.innerHTML = `
+    <h2 class="card-header">${player.strPlayer}</h2>
+
+    <ul class="options">
+      <li><strong>Team:</strong> ${player.strTeam || "N/A"}</li>
+      <li><strong>Sport:</strong> ${player.strSport || "N/A"}</li>
+      <li><strong>Nationality:</strong> ${player.strNationality || "N/A"}</li>
+    </ul>
+
+    <div class="feedback"></div>
+  `;
+
+  return div;
 }
