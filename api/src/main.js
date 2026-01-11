@@ -1,6 +1,6 @@
 const API = {
   key: "123",
-  baseUrl: "h ttps://www.thesportsdb.com/api/v1/json/123/searchplayers.php?p="
+  baseUrl: "https://www.thesportsdb.com/api/v1/json/123/searchplayers.php?p="
 };
 
 document.getElementById("searchBtn").addEventListener("click", searchPlayers);
