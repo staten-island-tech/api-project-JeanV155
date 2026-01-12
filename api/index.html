@@ -1,37 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sports Search</title>
-  <script defer src="script.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Player Search</title>
+  <script defer src="src/main.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 p-6">
 
   <div class="max-w-5xl mx-auto">
+    <h1 class="text-2xl font-bold mb-2">Search Player</h1>
 
-    <div class="mb-6">
-      <h1 class="text-2xl font-bold mb-2">Search Player</h1>
-      <div class="flex gap-2">
-        <input type="text" id="playerInput" placeholder="Enter player name" class="flex-1 border p-2 rounded">
-        <button id="searchBtn" class="bg-blue-500 text-white px-4 rounded">Search Player</button>
-      </div>
-      <p id="count" class="mt-2 text-gray-700"></p>
-      <div id="results" class="flex flex-wrap gap-4 mt-4"></div>
+    <div class="flex gap-2">
+      <input
+        type="text"
+        id="playerInput"
+        placeholder="Enter player name"
+        class="flex-1 border p-2 rounded"
+      />
+      <button
+        id="searchBtn"
+        class="bg-blue-500 text-white px-4 rounded"
+      >
+        Search Player
+      </button>
     </div>
 
-  
-    <div class="mb-6">
-      <h1 class="text-2xl font-bold mb-2">Search Team</h1>
-      <div class="flex gap-2">
-        <input type="text" id="teamInput" placeholder="Enter team name" class="flex-1 border p-2 rounded">
-        <button id="searchTeamBtn" class="bg-green-500 text-white px-4 rounded">Search Team</button>
-      </div>
-      <p id="teamCount" class="mt-2 text-gray-700"></p>
-      <div id="teamResults" class="flex flex-wrap gap-4 mt-4"></div>
-    </div>
-
+    <p id="count" class="mt-2 text-gray-700"></p>
+    <div id="results" class="flex flex-wrap gap-4 mt-4"></div>
   </div>
 
 </body>
