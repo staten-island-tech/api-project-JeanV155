@@ -44,7 +44,7 @@ async function searchPlayers() {
     return;
   }
 
-  countP.textContent = "Searching...";
+  countP.textContent = "Searching";
 
   try {
     const res = await fetch(API.playerUrl + encodeURIComponent(query));
